@@ -11,6 +11,7 @@ from . import __title__ as title
 from . import __version__ as version
 from . import exceptions
 from . import Remote
+from .remote_pin import RemotePin
 
 def _read_config():
     config = collections.defaultdict(lambda: None, {
@@ -80,6 +81,8 @@ def main():
                         help="socket timeout in seconds (0 = no timeout)")
     parser.add_argument("key", nargs="*",
                         help="keys to be sent (e.g. KEY_VOLDOWN)")
+    parser.add_argument("--pair", action="store_true",
+                        help="Pair with H and J series pin enabled TVS")
 
     args = parser.parse_args()
 
@@ -99,6 +102,10 @@ def main():
 
     if not config["host"]:
         logging.error("Error: --host must be set")
+        return
+
+    if args.pair:
+        RemotePin.pair(config)
         return
 
     try:
