@@ -24,7 +24,7 @@ class AESCipher:
 
     def encrypt(self, raw):
         cipher = AES.new(self.key, AES.MODE_ECB)
-        return cipher.encrypt(pad(raw))
+        return cipher.encrypt(bytes(pad(raw), encoding = "utf8"))
 
     def generate_command(self, key_press):
         command_bytes = self.encrypt(self.generate_json(key_press))
