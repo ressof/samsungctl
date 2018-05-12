@@ -36,7 +36,9 @@ It's possible to use the command line tool without installation:
 
 Command line usage
 ==================
-For H and J series encryopted comnmands. using python do something like this
+For H and J series encrypted comnmands. using python do something like this:
+
+pip install pycryptodome
 
 .. code-block:: python
 
