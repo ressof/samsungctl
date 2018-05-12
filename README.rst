@@ -36,6 +36,44 @@ It's possible to use the command line tool without installation:
 
 Command line usage
 ==================
+For H and J series encryopted comnmands. using python do something like this
+
+.. code-block:: python
+
+    from samsungctl.remote_pin import RemotePin
+    config = {
+    "name": "samsungctl",
+    "description": "PC",
+    "id": "",
+    "host": "XXX.XXX.XXX.XXX", #YOUR TV IP ADDRESS HERE
+    "port": 8000,
+    "method": "pin",
+    "timeout": 0,
+    }
+
+    RemotePin.pair(config)
+
+
+after it pairs it will print the session key and id. put it back into the config like this
+
+.. code-block:: python
+
+    config = {
+    "name": "samsungctl",
+    "description": "PC",
+    "id": "",
+    "host": "XXX.XXX.XXX.XXX", #YOUR TV IP ADDRESS HERE
+    "port": 8000,
+    "method": "pin",
+    "timeout": 0,
+    "session_key":"XXXXXX",
+    "session_id": "X",
+    }
+
+
+
+and then use can use this library as you normally would
+
 
 You can use ``samsungctl`` command to send keys to a TV:
 
