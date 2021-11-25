@@ -61,6 +61,10 @@ class RemotePin():
         self.connection.send(payload)
         time.sleep(self._key_interval)
         
+     def getFullUrl(urlPath):
+        global tvIP, tvPort
+        return "http://"+config['host']+":8080"+urlPath
+        
      def GetFullRequestUri(step, appId, deviceId):
         return getFullUrl("/ws/pairing?step="+str(step)+"&app_id="+appId+"&device_id="+deviceId)
 
