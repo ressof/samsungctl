@@ -62,6 +62,9 @@ class RemotePin():
         time.sleep(self._key_interval)
 
     _key_interval = 1.0
+    
+    def GetFullRequestUri(step, appId, deviceId):
+        return getFullUrl("/ws/pairing?step="+str(step)+"&app_id="+appId+"&device_id="+deviceId)
 
 
     @staticmethod
@@ -75,34 +78,40 @@ class RemotePin():
                             'User-Agent': 'Remotie%202/1 CFNetwork/893.7 Darwin/17.3.0'}
 
         ### STEP 0 START
-        device_id = '12345'
+        AppId = "12345"
+        deviceId =  "7e509404-9d7c-46b4-8f6a-e2a9668ad184"
         step0_pin_url = 'http://' + config['host'] + ':8080/ws/apps/CloudPINPage'
         requests.post(step0_pin_url, data='pin4')
-        step0_url = 'http://' + config['host'] + ':8080/ws/pairing?step=0&app_id=com.samsung.companion&device_id=' + device_id + '&type=1'
-        r = requests.get(step0_url)  # we can prob ignore this response
+        #step0_url = 'http://' + config['host'] + ':8080/ws/pairing?step=0&app_id=com.samsung.companion&device_id=' + device_id + '&type=1'
+        step0_url = GetFullRequestUri(0,AppId, deviceId)+"&type=1"
+        #r = requests.get(step0_url)  # we can prob ignore this response
+        r = requests.get(step0_url).text
         ### STEP 0 START
 
 
         ### STEP 1 START
         pin = input("Enter TV Pin: ")
-        payload = {'pin': pin, 'payload': '', 'deviceId': device_id}
-        r = requests.post(external_server + '/step1', headers=external_headers, data=json.dumps(payload), verify=False)
-        step1_url = 'http://' + config['host'] + ':8080/ws/pairing?step=1&app_id=com.samsung.companion&device_id=' + device_id + '&type=1'
-        step1_response = requests.post(step1_url, data=r.text)
+#        payload = {'pin': pin, 'payload': '', 'deviceId': device_id}
+#        r = requests.post(external_server + '/step1', headers=external_headers, data=json.dumps(payload), verify=False)
+        step1_url = GetFullRequestUri(1,AppId, deviceId)+"&type=1"
+        #step1_url = 'http://' + config['host'] + ':8080/ws/pairing?step=1&app_id=com.samsung.companion&device_id=' + device_id + '&type=1'
+        #step1_response = requests.post(step1_url, data=r.text)
+        step1_response = requests.get(step1_url).text
         #### STEP 1 END
 
 
         ### STEP 2 START
-        payload = {'pin': pin, 'payload': codecs.decode(step1_response.text, 'unicode_escape'), 'deviceId': device_id}
-        r = requests.post(external_server + '/step2', data=json.dumps(payload), headers=external_headers, verify=False)
-        step2_url = 'http://' + config['host'] + ':8080/ws/pairing?step=2&app_id=com.samsung.companion&device_id=' + device_id + '&type=1&request_id=0'
+        #payload = {'pin': pin, 'payload': codecs.decode(step1_response.text, 'unicode_escape'), 'deviceId': device_id}
+        #r = requests.post(external_server + '/step2', data=json.dumps(payload), headers=external_headers, verify=False)
+        #step2_url = 'http://' + config['host'] + ':8080/ws/pairing?step=2&app_id=com.samsung.companion&device_id=' + device_id + '&type=1&request_id=0'
+        step2_url = GetFullRequestUri(2, AppId, deviceId)
         step2_response = requests.post(step2_url, data=r.text)
         ### STEP 2 END
 
 
         ### STEP 3 START
-        payload = {'pin': pin, 'payload': codecs.decode(step2_response.text, 'unicode_escape'), 'deviceId': device_id}
-        r = requests.post(external_server + '/step3', data=json.dumps(payload), headers=external_headers, verify=False)
+        #payload = {'pin': pin, 'payload': codecs.decode(step2_response.text, 'unicode_escape'), 'deviceId': device_id}
+        #r = requests.post(external_server + '/step3', data=json.dumps(payload), headers=external_headers, verify=False)
         enc_key = r.json()['session_key']
         session = r.json()['session_id']
         print('session_key: ' + enc_key)
