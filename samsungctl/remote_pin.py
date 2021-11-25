@@ -60,13 +60,13 @@ class RemotePin():
         logging.info("Sending control command: %s", key)
         self.connection.send(payload)
         time.sleep(self._key_interval)
+        
+     def GetFullRequestUri(step, appId, deviceId):
+        return getFullUrl("/ws/pairing?step="+str(step)+"&app_id="+appId+"&device_id="+deviceId)
 
     _key_interval = 1.0
     
-    def GetFullRequestUri(step, appId, deviceId):
-        return getFullUrl("/ws/pairing?step="+str(step)+"&app_id="+appId+"&device_id="+deviceId)
-
-
+    
     @staticmethod
     def pair(config):
         import requests
